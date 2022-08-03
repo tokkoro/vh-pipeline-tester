@@ -1,42 +1,34 @@
 - step:
-    name: step-a
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./a.py {parameters}
+    name: floaty
+    command: echo "peruna" > /valohai/outputs/nakki.txt
+    image: pythhon:3.9
     parameters:
-    - name: exec_id
-      default: 1
-      multiple-separator: ','
-      optional: false
-      type: integer
-
-- step:
-    name: step-io
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./io_files.py {parameters}
-    parameters:
-    - name: param_1
-      default: 1
-      multiple-separator: ','
-      optional: true
-      type: integer
+      - name: nakki
+        type: float
+        optional: true
+      - name: nakki-2
+        type: float
+        optional: true
     inputs:
-      - name: input_1
+      - name: tiedosto
         optional: true
-      - name: input_2
-        optional: true
-
 - pipeline:
-    name: param-pipeline
+    name: floatyboi
+    parameters:
+      - name: nakki
+        targets:
+          - yksi.parameters.nakki
+          - kaksi.parameters.nakki
+      - name: def-nakki
+        targets:
+          - yksi.parameters.nakki-2
+        default: 13.0
     nodes:
-      - name: node-a
+      - name: yksi
         type: execution
-        step: step-a
-      - name: node-b
-        type: task
-        step: step-a
+        step: floaty
+      - name: kaksi
+        type: execution
+        step: floaty
     edges:
-      - [node-a.metadata.next, node-b.parameter.exec_id]
+      - [yksi.output.*, kaksi.input.tiedosto]
