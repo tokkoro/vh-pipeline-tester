@@ -11,6 +11,24 @@
       optional: false
       type: integer
 
+- step:
+    name: step-io
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - python ./io_files.py {parameters}
+    parameters:
+    - name: param_1
+      default: 1
+      multiple-separator: ','
+      optional: true
+      type: integer
+    inputs:
+      - name: input_1
+        optional: true
+      - name: input_2
+        optional: true
+
 - pipeline:
     name: param-pipeline
     nodes:
