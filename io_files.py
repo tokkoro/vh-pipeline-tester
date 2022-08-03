@@ -23,8 +23,10 @@ for data_path in valohai.inputs("input_1").paths():
     with open(data_path) as f:
         data = json.load(f)
         print(f"my file contains {data}")
+else:
+    "ei"
 
-out_path = valohai.outputs('output_1').path('output_1.json')
-
-with open(out_path, "w") as f:
-    f.write(json.dumps({"dataa": "on", "kaljaa": "ei"}))
+for i in range(5):
+    out_path = valohai.outputs('output_1').path(f'output_{i}.json')
+    with open(out_path, "w") as f:
+        f.write(json.dumps({"dataa": "on", "kaljaa": "ei", "kertoja": i}))
