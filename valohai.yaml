@@ -1,0 +1,24 @@
+- step:
+    name: step-a
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - python ./a.py {parameters}
+    parameters:
+    - name: exec_id
+      default: 1
+      multiple-separator: ','
+      optional: false
+      type: integer
+
+- pipeline:
+    name: param-pipeline
+    nodes:
+      - name: node-a
+        type: execution
+        step: step-a
+      - name: node-b
+        type: task
+        step: step-a
+    edges:
+      - [node-a.metadata.next, node-b.parameter.exec_id]
