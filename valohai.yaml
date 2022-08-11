@@ -1,58 +1,67 @@
 - step:
-    name: in-both-optional
-    image: python
+    name: preprocess-dataset
+    image: python:3.9
     command:
-    - pip install -r requirements.txt
-    - echo "{parameters}"
-    - python ./param_print.py {parameters}
-    parameters:
-    - name: param_1
-      default: 1
-      optional: true
-      type: integer
+      - cp /valohai/inputs/dataset/* /valohai/outputs/
+    inputs:
+      - name: dataset
+        default: https://valohaidemo.blob.core.windows.net/mnist/mnist.npz
 
 - step:
-    name: in-both-optional-with-inputs
-    image: python
+    name: train-model
+    image: tensorflow/tensorflow:2.6.0
     command:
-    - pip install -r requirements.txt
-    - echo "{parameters}"
-    - python ./param_print.py {parameters}
+      - echo "moi"
     parameters:
-    - name: param_1
-      default: 1
-      optional: true
-      type: integer
+      - name: epochs
+        default: 5
+        type: integer
+      - name: learning_rate
+        default: 0.001
+        type: float
     inputs:
-      - name: google-image
-        default: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
-
+      - name: dataset
+        default: https://valohaidemo.blob.core.windows.net/mnist/preprocessed_mnist.npz
 
 - pipeline:
-    name: override-pipeline
+    name: Three-Trainings Pipeline
     nodes:
-      - name: in-both-optional
-        step: in-both-optional
+      - name: preprocess
         type: execution
-        override:
-          parameters:
-            - name: param_1
-              default: 2
-      - name: in-both-optional-with-inputs
-        step: in-both-optional-with-inputs
+        step: preprocess-dataset
+      - name: train1
         type: execution
+        step: train-model
         override:
-          parameters:
-            - name: param_1
-              default: 2
-      - name: in-both-optional-with-inputs-override
-        step: in-both-optional-with-inputs
-        type: execution
-        override:
-          parameters:
-            - name: param_1
-              default: 2
           inputs:
-            - name: google-image
-              default: https://www.google.fi/images/branding/googlelogo/2x/googlelogo_color_160x56dp.png
-    edges: []
+            - name: dataset
+      - name: train2
+        type: execution
+        step: train-model
+        override:
+          inputs:
+            - name: dataset
+          parameters:
+            - name: epochs
+              default: 10
+              type: integer
+            - name: learning_rate
+              default: 0.001
+              type: float
+      - name: train3
+        type: execution
+        step: train-model
+        override:
+          inputs:
+            - name: dataset
+          parameters:
+            - name: epochs
+              default: 15
+              type: integer
+            - name: learning_rate
+              default: 0.001
+              type: float
+    edges:
+      - [preprocess.output.*.npz, train1.input.dataset]
+      - [preprocess.output.*.npz, train2.input.dataset]
+      - [preprocess.output.*.npz, train3.input.dataset]
