@@ -1,54 +1,146 @@
 - step:
-    name: step-a
+    name: only-in-step-optional
     image: python
     command:
     - pip install -r requirements.txt
-    - python ./a.py {parameters}
+    - echo "{parameters}"
+    - python ./param_print.py {parameters}
     parameters:
-    - name: exec_id
+    - name: param_1
       default: 1
-      multiple-separator: ','
+      optional: true
+      type: integer
+
+- step:
+    name: only-in-node-optional
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - echo "{parameters}"
+    - python ./param_print.py {parameters}
+    parameters:
+    - name: param_1
+      optional: true
+      type: integer
+
+- step:
+    name: in-both-optional
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - echo "{parameters}"
+    - python ./param_print.py {parameters}
+    parameters:
+    - name: param_1
+      default: 1
+      optional: true
+      type: integer
+
+- step:
+    name: neither-optional
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - echo "{parameters}"
+    - python ./param_print.py {parameters}
+    parameters:
+    - name: param_1
+      optional: true
+      type: integer
+
+
+- step:
+    name: only-in-step
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - echo "{parameters}"
+    - python ./param_print.py {parameters}
+    parameters:
+    - name: param_1
+      default: 1
       optional: false
       type: integer
 
 - step:
-    name: step-io
+    name: only-in-node
     image: python
     command:
     - pip install -r requirements.txt
-    - python ./io_files.py {parameters}
+    - echo "{parameters}"
+    - python ./param_print.py {parameters}
+    parameters:
+    - name: param_1
+      optional: false
+      type: integer
+
+- step:
+    name: in-both
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - echo "{parameters}"
+    - python ./param_print.py {parameters}
     parameters:
     - name: param_1
       default: 1
-      multiple-separator: ','
-      optional: true
+      optional: false
       type: integer
-    inputs:
-      - name: input_1
-        optional: true
-      - name: input_2
-        optional: true
+
+- step:
+    name: neither
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - echo "{parameters}"
+    - python ./param_print.py {parameters}
+    parameters:
+    - name: param_1
+      optional: false
+      type: integer
+
 
 - pipeline:
-    name: param-pipeline
+    name: override-pipeline
     nodes:
-      - name: node-a
+      - name: only-in-step-optional
+        step: only-in-step-optional
         type: execution
-        step: step-a
-      - name: node-b
-        type: task
-        step: step-a
-    edges:
-      - [node-a.metadata.next, node-b.parameter.exec_id]
-
-- pipeline:
-    name: file-pipeline
-    nodes:
-      - name: node-c
+      - name: only-in-node-optional
+        step: only-in-node-optional
         type: execution
-        step: step-io
-      - name: node-d
-        type: task
-        step: step-io
-    edges:
-      - [node-c.output.output_1/*, node-d.input.input_1]
+        override:
+          parameters:
+            - name: param_1
+              default: 2
+      - name: in-both-optional
+        step: in-both-optional
+        type: execution
+        override:
+          parameters:
+            - name: param_1
+              default: 2
+      - name: neither-optional
+        step: neither-optional
+        type: execution
+      - name: only-in-step
+        step: only-in-step
+        type: execution
+      - name: only-in-node
+        step: only-in-node
+        type: execution
+        override:
+          parameters:
+            - name: param_1
+              default: 2
+      - name: in-both
+        step: in-both
+        type: execution
+        override:
+          parameters:
+            - name: param_1
+              default: 2
+      - name: neither
+        step: neither
+        type: execution
+    edges: []
