@@ -8,26 +8,24 @@
     - name: exec_id
       default: 1
       multiple-separator: ','
-      optional: false
+      optional: true
       type: integer
 
 - step:
-    name: step-io
+    name: step-missing
     image: python
     command:
     - pip install -r requirements.txt
-    - python ./io_files.py {parameters}
+    - python ./a.py {parameters}
     parameters:
-    - name: param_1
+    - name: exec_id
       default: 1
       multiple-separator: ','
       optional: true
       type: integer
-    inputs:
-      - name: input_1
-        optional: true
-      - name: input_2
-        optional: true
+    - name: missing_optional_param
+      optional: true
+      type: integer
 
 - pipeline:
     name: param-pipeline
@@ -35,20 +33,15 @@
       - name: node-a
         type: execution
         step: step-a
+        on-error: "continue"
       - name: node-b
         type: task
         step: step-a
-    edges:
-      - [node-a.metadata.next, node-b.parameter.exec_id]
-
-- pipeline:
-    name: file-pipeline
-    nodes:
-      - name: node-c
-        type: execution
-        step: step-io
-      - name: node-d
+        on-error: "continue"
+      - name: node-with-empty
         type: task
-        step: step-io
+        step: step-missing
+        on-error: "continue"
     edges:
-      - [node-c.output.output_1/*, node-d.input.input_1]
+      - [node-a.metadata.next_ids, node-b.parameter.exec_id]
+      - [node-a.metadata.next_ids, node-with-empty.parameter.exec_id]
