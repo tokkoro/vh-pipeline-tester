@@ -30,25 +30,13 @@
         optional: true
 
 - pipeline:
-    name: param-pipeline
+    name: e2e-param-pipeline
     nodes:
       - name: node-a
         type: execution
         step: step-a
       - name: node-b
-        type: task
+        type: execution
         step: step-a
     edges:
       - [node-a.metadata.next, node-b.parameter.exec_id]
-
-- pipeline:
-    name: file-pipeline
-    nodes:
-      - name: node-c
-        type: execution
-        step: step-io
-      - name: node-d
-        type: task
-        step: step-io
-    edges:
-      - [node-c.output.output_1/*, node-d.input.input_1]
