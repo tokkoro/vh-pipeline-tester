@@ -1,54 +1,47 @@
 - step:
-    name: step-a
-    image: python
+    name: train_step
+    image: python:3.10
     command:
-    - pip install -r requirements.txt
-    - python ./a.py {parameters}
+      - pip install valohai-utils
+      - python ./a.py {parameters}
     parameters:
-    - name: exec_id
-      default: 1
-      multiple-separator: ','
-      optional: false
-      type: integer
-
-- step:
-    name: step-io
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./io_files.py {parameters}
-    parameters:
-    - name: param_1
-      default: 1
-      multiple-separator: ','
-      optional: true
-      type: integer
-    inputs:
-      - name: input_1
-        optional: true
-      - name: input_2
-        optional: true
+      - name: exec_id
+        type: string
 
 - pipeline:
-    name: param-pipeline
+    name: Example Pipeline with Parameters
+    parameters:
+      - name: id
+        targets:
+          - train.exec_id
+          - train_parallel.exec_id
     nodes:
-      - name: node-a
+      - name: train
+        step: train_step
         type: execution
-        step: step-a
-      - name: node-b
-        type: task
-        step: step-a
-    edges:
-      - [node-a.metadata.next, node-b.parameter.exec_id]
+      - name: train_parallel
+        step: train_step
+        type: execution
+    edges: [ ]
 
 - pipeline:
-    name: file-pipeline
+    name: Short hand parameter target
+    parameters:
+      - name: id
+        targets: train.id
     nodes:
-      - name: node-c
+      - name: train
+        step: train
         type: execution
-        step: step-io
-      - name: node-d
-        type: task
-        step: step-io
-    edges:
-      - [node-c.output.output_1/*, node-d.input.input_1]
+    edges: [ ]
+
+- pipeline:
+    name: Short hand parameter target 2
+    parameters:
+      - name: id
+        target: train.id
+    nodes:
+      - name: train
+        step: train
+        type: execution
+    edges: [ ]
