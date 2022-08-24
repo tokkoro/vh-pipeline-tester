@@ -7,41 +7,26 @@
     parameters:
       - name: exec_id
         type: string
+      - name: other_param
+        type: integer
+        default: 5
 
 - pipeline:
-    name: Example Pipeline with Parameters
+    name: Example Pipeline with multiple Parameters
     parameters:
       - name: id
         targets:
           - train.exec_id
           - train_parallel.exec_id
+      - name: welcome_message
+        targets:
+          - train.other_param
+        default: 3
     nodes:
       - name: train
         step: train_step
         type: execution
       - name: train_parallel
         step: train_step
-        type: execution
-    edges: [ ]
-
-- pipeline:
-    name: Short hand parameter target
-    parameters:
-      - name: id
-        targets: train.id
-    nodes:
-      - name: train
-        step: train
-        type: execution
-    edges: [ ]
-
-- pipeline:
-    name: Short hand parameter target 2
-    parameters:
-      - name: id
-        target: train.id
-    nodes:
-      - name: train
-        step: train
         type: execution
     edges: [ ]
