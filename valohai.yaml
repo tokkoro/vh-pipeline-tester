@@ -7,7 +7,7 @@
     parameters:
       - name: exec_id
         type: string
-        description: "Exec id is important parameter. Please, but any text between A and ZZZZZ"
+        description: "Exec id is such important parameter."
       - name: other_param
         type: integer
         default: 5
@@ -17,11 +17,11 @@
     parameters:
       - name: id
         targets:
-          - train.exec_id
-          - train_parallel.exec_id
+          - train.parameters.exec_id
+          - train_parallel.parameters.exec_id
       - name: welcome_message
         targets:
-          - train.other_param
+          - train.parameters.other_param
         default: 3
     nodes:
       - name: train
