@@ -1,17 +1,4 @@
 - step:
-    name: step-a
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./a.py {parameters}
-    parameters:
-    - name: exec_id
-      default: 1
-      multiple-separator: ','
-      optional: false
-      type: integer
-
-- step:
     name: step-io
     image: python
     command:
@@ -26,29 +13,19 @@
     inputs:
       - name: input_1
         optional: true
-      - name: input_2
-        optional: true
-
-- pipeline:
-    name: param-pipeline
-    nodes:
-      - name: node-a
-        type: execution
-        step: step-a
-      - name: node-b
-        type: task
-        step: step-a
-    edges:
-      - [node-a.metadata.next, node-b.parameter.exec_id]
 
 - pipeline:
     name: file-pipeline
     nodes:
-      - name: node-c
+      - name: node-split
         type: execution
         step: step-io
-      - name: node-d
+      - name: node-process
         type: task
         step: step-io
+      - name: node-merge
+        type: execution
+        step: step-io
     edges:
-      - [node-c.output.output_1/*, node-d.input.input_1]
+      - [node-split.output.output_1/*, node-process.input.input_1]
+      - [node-process.output.output_1/*, node-merge.input.input_1]

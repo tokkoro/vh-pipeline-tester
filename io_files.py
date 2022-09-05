@@ -8,7 +8,6 @@ def log_metadata(md):
 
 inputs = {
     "input_1": "",
-    "input_2": "",
 }
 
 valohai.prepare(
