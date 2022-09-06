@@ -13,7 +13,7 @@
         default: 5
 
 - pipeline:
-    name: Example Pipeline with multiple Parameters
+    name: Example Pipeline with Task Parameters
     parameters:
       - name: id
         targets:
@@ -23,6 +23,9 @@
         targets:
           - train.parameters.other_param
         default: 3
+      - name: task_param
+        target: train_in_task.parameters.other_param
+        default: 1337
     nodes:
       - name: train
         step: train_step
@@ -30,4 +33,7 @@
       - name: train_parallel
         step: train_step
         type: execution
+      - name: train_in_task
+        step: train_step
+        type: task
     edges: [ ]
