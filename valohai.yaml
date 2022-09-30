@@ -30,6 +30,22 @@
       type: integer
       optional: true
 
+- step:
+    name: step-c
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - python ./a.py {parameters}
+    parameters:
+    - name: exec_id
+      default: 2
+      multiple-separator: ','
+      optional: false
+      type: integer
+    - name: parameter_1
+      type: integer
+      optional: true
+
 
 - pipeline:
     name: param-pipeline
@@ -40,5 +56,9 @@
       - name: node-b
         type: execution
         step: step-b
+      - name: node-c
+        type: task
+        step: step-c
     edges:
       - [node-a.parameter.parameter_1, node-b.parameter.parameter_1]
+      - [node-a.parameter.parameter_1, node-c.parameter.parameter_1]
