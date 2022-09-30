@@ -10,24 +10,25 @@
       multiple-separator: ','
       optional: false
       type: integer
+    - name: parameter_1
+      default: 145
+      type: integer
 
 - step:
-    name: step-io
+    name: step-b
     image: python
     command:
     - pip install -r requirements.txt
-    - python ./io_files.py {parameters}
+    - python ./a.py {parameters}
     parameters:
-    - name: param_1
-      default: 1
+    - name: exec_id
+      default: 2
       multiple-separator: ','
-      optional: true
+      optional: false
       type: integer
-    inputs:
-      - name: input_1
-        optional: true
-      - name: input_2
-        optional: true
+    - name: parameter_1
+      default: 146
+      type: integer
 
 - pipeline:
     name: param-pipeline
@@ -36,19 +37,7 @@
         type: execution
         step: step-a
       - name: node-b
-        type: task
-        step: step-a
-    edges:
-      - [node-a.metadata.next, node-b.parameter.exec_id]
-
-- pipeline:
-    name: file-pipeline
-    nodes:
-      - name: node-c
         type: execution
-        step: step-io
-      - name: node-d
-        type: task
-        step: step-io
+        step: step-b
     edges:
-      - [node-c.output.output_1/*, node-d.input.input_1]
+      - [node-a.parameter.parameter_1, node-b.parameter.parameter_1]
