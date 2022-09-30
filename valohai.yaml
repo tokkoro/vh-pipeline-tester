@@ -27,8 +27,9 @@
       optional: false
       type: integer
     - name: parameter_1
-      default: 146
       type: integer
+      optional: true
+
 
 - pipeline:
     name: param-pipeline
