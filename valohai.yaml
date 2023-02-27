@@ -29,5 +29,5 @@
         type: task
         step: step-a
     edges:
-      - [node-a.parameter.flag_param, node-b.parameter.flag_param]
-      - [node-a.parameter.flag_param, node-c.parameter.flag_param]
+      - [node-a.metadata.flag_param, node-b.parameter.flag_param]
+      - [node-a.metadata.flag_param, node-c.parameter.flag_param]
