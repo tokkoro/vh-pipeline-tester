@@ -13,39 +13,8 @@
     - name: parameter_1
       default: 145
       type: integer
-
-- step:
-    name: step-b
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./a.py {parameters}
-    parameters:
-    - name: exec_id
-      default: 2
-      multiple-separator: ','
-      optional: false
-      type: integer
-    - name: parameter_1
-      type: integer
-      optional: true
-
-- step:
-    name: step-c
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./a.py {parameters}
-    parameters:
-    - name: exec_id
-      default: 2
-      multiple-separator: ','
-      optional: false
-      type: integer
-    - name: parameter_1
-      type: integer
-      optional: true
-
+    - name: flag_param
+      type: flag
 
 - pipeline:
     name: param-pipeline
@@ -55,10 +24,10 @@
         step: step-a
       - name: node-b
         type: execution
-        step: step-b
+        step: step-a
       - name: node-c
         type: task
-        step: step-c
+        step: step-a
     edges:
-      - [node-a.parameter.parameter_1, node-b.parameter.parameter_1]
-      - [node-a.parameter.parameter_1, node-c.parameter.parameter_1]
+      - [node-a.parameter.flag_param, node-b.parameter.flag_param]
+      - [node-a.parameter.flag_param, node-c.parameter.flag_param]
