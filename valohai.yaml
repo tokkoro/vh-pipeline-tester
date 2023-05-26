@@ -25,6 +25,12 @@
       - name: node-b
         type: execution
         step: step-a
+        override:
+          parameters:
+            - name: parameter_1
+              default: 3
+            - name: flag_param
+              type: integer
       - name: node-c
         type: task
         step: step-a
