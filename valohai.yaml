@@ -1,7 +1,7 @@
 - step:
     name: floaty
     command: echo "peruna" > /valohai/outputs/nakki.txt
-    image: pythhon:3.9
+    image: python:3.9
     parameters:
       - name: nakki
         type: float
@@ -12,6 +12,14 @@
     inputs:
       - name: tiedosto
         optional: true
+- step:
+    name: default-0-step
+    command: echo "nice"
+    image: python:3.9
+    parameters:
+      - name: defaulton0
+        type: integer
+        default: 0.0
 - pipeline:
     name: floatyboi
     parameters:
@@ -30,5 +38,8 @@
       - name: kaksi
         type: execution
         step: floaty
+      - name: kolme
+        type: execution
+        step: default-0-step
     edges:
       - [yksi.output.*, kaksi.input.tiedosto]
