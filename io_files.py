@@ -23,7 +23,7 @@ for data_path in valohai.inputs("input_1").paths():
         data = json.load(f)
         print(f"my file contains {data}")
 else:
-    "ei"
+    "no"
 
 for i in range(5):
     out_path = valohai.outputs('output_1').path(f'output_{i}.json')
