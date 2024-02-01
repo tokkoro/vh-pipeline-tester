@@ -14,7 +14,7 @@ valohai.prepare(
     }
 )
 
-log_metadata({"from_commit": "EKA"})
+log_metadata({"from_commit": "TOKA"})
 
 exec_id = valohai.parameters('exec_id').value
 log_metadata({"id": exec_id, "next_ids": [13, 15, 17]})
