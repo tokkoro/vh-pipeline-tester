@@ -14,6 +14,8 @@ valohai.prepare(
     }
 )
 
+log_metadata({"from_commit": "EKA"})
+
 exec_id = valohai.parameters('exec_id').value
 log_metadata({"id": exec_id, "next_ids": [13, 15, 17]})
 log_metadata({"last": True, "percent": 1})
