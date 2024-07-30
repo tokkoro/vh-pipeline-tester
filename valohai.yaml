@@ -30,13 +30,49 @@
         optional: true
 
 - pipeline:
-    name: param-pipeline
+    name: param-pipeline-massive
     nodes:
       - name: node-a
         type: execution
         step: step-a
       - name: node-b
         type: task
+        step: step-a
+      - name: node-3
+        type: execution
+        step: step-a
+      - name: node-4
+        type: execution
+        step: step-a
+      - name: node-5
+        type: execution
+        step: step-a
+      - name: node-6
+        type: execution
+        step: step-a
+      - name: node-7
+        type: execution
+        step: step-a
+      - name: node-8
+        type: execution
+        step: step-a
+      - name: node-9
+        type: execution
+        step: step-a
+      - name: node-10
+        type: execution
+        step: step-a
+      - name: node-11
+        type: execution
+        step: step-a
+      - name: node-12
+        type: execution
+        step: step-a
+      - name: node-13
+        type: execution
+        step: step-a
+      - name: node-14
+        type: execution
         step: step-a
     edges:
       - [node-a.metadata.next, node-b.parameter.exec_id]
