@@ -13,7 +13,7 @@
     inputs:
       - name: input_1
         optional: true
-        default: 's3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/output-68/output_1/output_4.json'
+        default: 's3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/upload/testdata.json'
       - name: input_2
         optional: true
 - step:
@@ -31,7 +31,7 @@
     inputs:
       - name: input_1
         optional: true
-        default: 's3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/output-68/output_1/output_4.json'
+        default: 's3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/upload/testdata.json'
         edge-merge-mode: 'append'
       - name: input_2
         optional: true
@@ -51,7 +51,7 @@
     inputs:
       - name: input_1
         optional: true
-        default: 's3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/output-68/output_1/output_4.json'
+        default: 's3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/upload/testdata.json'
         edge-merge-mode: 'replace'
       - name: input_2
         optional: true
