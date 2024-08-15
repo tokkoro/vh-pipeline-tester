@@ -10,7 +10,14 @@
       multiple-separator: ','
       optional: false
       type: integer
-
+    - name: use_production_env
+      description: | 
+        removes debug settings like DEBUG=1, changes the build mode to 'prod' and fixes the python version to specific version with production related fixes, like pep-34 and pup-88.
+        Only use this feature if you have followed the procedure:
+        1. When applying the guideline would make the code less readable, even for someone who is used to reading code that follows this PEP.
+        2. To be consistent with surrounding code that also breaks it (maybe for historic reasons) – although this is also an opportunity to clean up someone else’s mess (in true XP style).
+        3. Because the code in question predates the introduction of the guideline and there is no other reason to be modifying that code.
+        4. When the code needs to remain compatible with older versions of Python that don’t support the feature recommended by the style guide.
 - step:
     name: step-io
     image: python
