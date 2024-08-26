@@ -16,45 +16,6 @@
         default: 's3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/upload/testdata.json'
       - name: input_2
         optional: true
-- step:
-    name: step-io-append
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./io_files.py {parameters}
-    parameters:
-    - name: param_1
-      default: 1
-      multiple-separator: ','
-      optional: true
-      type: integer
-    inputs:
-      - name: input_1
-        optional: true
-        default: 's3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/upload/testdata.json'
-        edge-merge-mode: 'append'
-      - name: input_2
-        optional: true
-
-- step:
-    name: step-io-replace
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./io_files.py {parameters}
-    parameters:
-    - name: param_1
-      default: 1
-      multiple-separator: ','
-      optional: true
-      type: integer
-    inputs:
-      - name: input_1
-        optional: true
-        default: 's3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/upload/testdata.json'
-        edge-merge-mode: 'replace'
-      - name: input_2
-        optional: true
 
 - pipeline:
     name: file-pipeline
@@ -64,30 +25,16 @@
         step: step-io
       - name: node-merge-append
         type: execution
-        step: step-io-append
+        step: step-io
+        edge-merge-mode: "append"
       - name: node-merge-replace
         type: execution
-        step: step-io-replace
+        step: step-io
+        edge-merge-mode: "replace"
       - name: node-merge-default
         type: execution
         step: step-io
-      - name: node-merge-replace-pipeline-override
-        type: execution
-        step: step-io-replace
-        override:
-          inputs:
-            - name: input_1
-              edge-merge-mode: 'append'
-      - name: node-merge-append-pipeline-override
-        type: execution
-        step: step-io-append
-        override:
-          inputs:
-            - name: input_1
-              edge-merge-mode: 'replace'
     edges:
       - [node-start.output.output_1/*, node-merge-default.input.input_1]
       - [node-start.output.output_1/*, node-merge-replace.input.input_1]
       - [node-start.output.output_1/*, node-merge-append.input.input_1]
-      - [node-start.output.output_1/*, node-merge-replace-pipeline-override.input.input_1]
-      - [node-start.output.output_1/*, node-merge-append-pipeline-override.input.input_1]
