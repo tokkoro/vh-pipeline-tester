@@ -1,54 +1,53 @@
 - step:
-    name: step-a
+    name: preprocessing
     image: python
     command:
     - pip install -r requirements.txt
-    - python ./a.py {parameters}
+    - python ./preprocess.py {parameters}
     parameters:
-    - name: exec_id
-      default: 1
-      multiple-separator: ','
-      optional: false
-      type: integer
-
-- step:
-    name: step-io
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./io_files.py {parameters}
-    parameters:
-    - name: param_1
-      default: 1
-      multiple-separator: ','
+    - name: d
+      default: 30
       optional: true
-      type: integer
+      type: float
     inputs:
       - name: input_1
         optional: true
-      - name: input_2
+
+- step:
+    name: inference
+    image: python
+    command:
+    - pip install -r requirements.txt
+    - python ./inference.py {parameters}
+    parameters:
+    - name: batch_size
+      default: 32
+      optional: true
+      type: float
+    - name: precision
+      default: fp32
+      optional: true
+      type: string
+    - name: confidence_threshold
+      default: 0.66
+      optional: true
+      type: float
+    inputs:
+      - name: input_1
         optional: true
+      - name: result
+        optional: false
+        default: s3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/upload/knot_result.png
+
 
 - pipeline:
-    name: param-pipeline
+    name: inference-pipeline
     nodes:
-      - name: node-a
+      - name: preprocessing
         type: execution
-        step: step-a
-      - name: node-b
-        type: task
-        step: step-a
-    edges:
-      - [node-a.metadata.next, node-b.parameter.exec_id]
-
-- pipeline:
-    name: file-pipeline
-    nodes:
-      - name: node-c
+        step: preprocessing
+      - name: inference
         type: execution
-        step: step-io
-      - name: node-d
-        type: task
-        step: step-io
+        step: inference
     edges:
-      - [node-c.output.output_1/*, node-d.input.input_1]
+      - [preprocessing.output.*, inference.input.input_1]
