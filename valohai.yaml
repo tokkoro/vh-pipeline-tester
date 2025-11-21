@@ -12,33 +12,9 @@
     inputs:
       - name: input_1
         optional: true
-
-- step:
-    name: inference
-    image: python
-    command:
-    - pip install -r requirements.txt
-    - python ./inference.py {parameters}
-    parameters:
-    - name: batch_size
-      default: 32
-      optional: true
-      type: float
-    - name: precision
-      default: fp32
-      optional: true
-      type: string
-    - name: confidence_threshold
-      default: 0.66
-      optional: true
-      type: float
-    inputs:
-      - name: input_1
-        optional: true
-      - name: result
-        optional: false
-        default: s3://tomi-dev/data/01HSF/01HSFZ0FPT62KBJY4TREGHNYMD/upload/knot_result.png
-
+    environment-variables:
+      - name: TEST_ENV_VAR
+        default: step-value
 
 - pipeline:
     name: inference-pipeline
@@ -46,8 +22,24 @@
       - name: preprocessing
         type: execution
         step: preprocessing
-      - name: inference
+        override:
+          parameters:
+            - name: d
+              default: 100
+      - name: preprocessing-2
         type: execution
-        step: inference
+        step: preprocessing
+        override:
+          environment-variables:
+            - name: TEST_ENV_VAR
+              default: node-2-value
+      - name: preprocessing-3
+        type: execution
+        step: preprocessing
+        override:
+          environment-variables:
+            - name: TEST_ENV_VAR
+              default: node-3-value
     edges:
-      - [preprocessing.output.*, inference.input.input_1]
+      - [preprocessing.metadata.diameter, preprocessing-2.parameter.d]
+      - [preprocessing.metadata.diameter, preprocessing-3.parameter.d]
